@@ -24,12 +24,14 @@ import br.com.vinma.agenda.ui.StudentsListView;
 
 public class StudentsListActivity extends AppCompatActivity {
 
-    private final StudentsListView studentsListView = new StudentsListView(this);
+    private StudentsListView studentsListView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_list);
+
+        studentsListView = new StudentsListView(this);
 
         configAddStudentButton();
         configActionBar();
