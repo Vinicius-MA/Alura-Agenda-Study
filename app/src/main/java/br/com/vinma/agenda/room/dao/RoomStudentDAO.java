@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ public interface RoomStudentDAO {
     @Delete
     void remove(Student student);
 
-    @Insert
-    // TODO: Implement RoomStudentDao.edit
+    @Update
     void edit(Student selectedStudent);
 }
