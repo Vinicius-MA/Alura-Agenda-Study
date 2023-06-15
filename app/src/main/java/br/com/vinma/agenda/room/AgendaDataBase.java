@@ -13,12 +13,16 @@ import br.com.vinma.agenda.room.dao.StudentDAO;
 public abstract class AgendaDataBase extends RoomDatabase {
 
     private static final String NAME = "agenda.db";
+    private static AgendaDataBase instance;
 
     public abstract StudentDAO getRoomStudentDao();
 
-    public static AgendaDataBase getInstance(Context context){
-        return Room.databaseBuilder(context, AgendaDataBase.class, NAME)
-                .allowMainThreadQueries()
-                .build();
+    public synchronized static AgendaDataBase getInstance(Context context){
+        if(instance == null){
+            instance = Room.databaseBuilder(context, AgendaDataBase.class, NAME)
+                    .allowMainThreadQueries()
+                    .build();
+        }
+        return instance;
     }
 }
