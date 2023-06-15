@@ -11,7 +11,7 @@ import java.util.List;
 import br.com.vinma.agenda.model.Student;
 
 @Dao
-public interface RoomStudentDAO {
+public interface StudentDAO {
 
     @Insert
     void save(Student student);
