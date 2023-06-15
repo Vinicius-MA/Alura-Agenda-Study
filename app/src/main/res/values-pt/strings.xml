@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UI -->
+        <!--  APPLICATION  -->
+                <string name="app_name">Agenda</string>
+        <!--  StudentsListActivity  -->
+                <string name="act_std_list_stat_bar_title">Lista de Alunos</string>
+                <string name="act_std_list_fab_add_std_desc">Adicionar Aluno</string>
+                <string name="act_std_list_con_menu_opt_remove">Remover</string>
+                <string name="act_std_list_con_menu_opt_remove_dial_title">Removendo Aluno</string>
+                <string name="act_std_list_con_menu_opt_remove_dial_pos">Sim</string>
+                <string name="act_std_list_con_menu_opt_remove_dial_neg">Não</string>
+                <string name="act_std_list_con_menu_opt_remove_dial_msg">Você tem certeza de que quer remover este aluno permanentemente?</string>
+        <!--  StudentsFormActivity  -->
+                <string name="act_std_form_stat_bar_title_new">Novo Aluno</string>
+                <string name="act_std_form_stat_bar_title_edit">Editar Aluno</string>
+                <string name="act_std_form_hint_name">Nome</string>
+                <string name="act_std_form_hint_phone">Número de telefone</string>
+                <string name="act_std_form_hint_email">Endreço de e-mail</string>
+                <string name="act_std_form_btn_save">Salvar</string>
+    <!-- MODELS -->
+        <!-- Student-->
+                <string name="model_student_to_string">Nome: %s\nTelefone: %s; E-mail: %s</string>
+</resources>

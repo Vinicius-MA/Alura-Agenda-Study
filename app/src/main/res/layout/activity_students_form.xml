@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <!-- Name EditText -->
+        <EditText
+            android:id="@+id/activity_students_form_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/act_std_form_hint_name"
+            android:inputType="textCapWords"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAutofill="no"
+            />
+        <!-- Phone EditText -->
+        <EditText
+            android:id="@+id/activity_students_form_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/act_std_form_hint_phone"
+            android:inputType="phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_students_form_name"
+            android:importantForAutofill="no"
+            />
+        <!-- Email EditText -->
+        <EditText
+            android:id="@+id/activity_students_form_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/act_std_form_hint_email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/activity_students_form_phone"
+            android:importantForAutofill="no"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
