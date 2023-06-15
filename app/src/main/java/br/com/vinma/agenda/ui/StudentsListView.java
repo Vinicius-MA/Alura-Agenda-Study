@@ -5,27 +5,23 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.room.Room;
 
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.AgendaDataBase;
-import br.com.vinma.agenda.room.dao.RoomStudentDAO;
+import br.com.vinma.agenda.room.dao.StudentDAO;
 import br.com.vinma.agenda.ui.adapter.StudentListAdapter;
 
 public class StudentsListView {
 
     private final Context mContext;
     private final StudentListAdapter studentsListAdapter;
-    private final RoomStudentDAO dao;
+    private final StudentDAO dao;
 
     public StudentsListView(Context mContext) {
         this.mContext = mContext;
         this.studentsListAdapter = new StudentListAdapter(this.mContext);
-        dao = Room.databaseBuilder(mContext, AgendaDataBase.class, AgendaDataBase.NAME)
-                .allowMainThreadQueries()
-                .build()
-                .getRoomStudentDao();
+        dao = AgendaDataBase.getInstance(this.mContext).getRoomStudentDao();
     }
 
     public void confirmStudentRemoval(AdapterView.AdapterContextMenuInfo menuInfo) {

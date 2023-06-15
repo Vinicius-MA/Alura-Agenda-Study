@@ -11,20 +11,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import br.com.vinma.agenda.R;
-import br.com.vinma.agenda.dao.StudentDAO;
 import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.AgendaDataBase;
-import br.com.vinma.agenda.room.dao.RoomStudentDAO;
+import br.com.vinma.agenda.room.dao.StudentDAO;
 
 public class StudentsFormActivity extends AppCompatActivity {
 
     private EditText etName;
     private EditText etPhone;
     private EditText etEmail;
-    private RoomStudentDAO dao;
+    private StudentDAO dao;
     private Student selectedStudent;
 
     @Override
@@ -33,11 +31,7 @@ public class StudentsFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_form);
 
-        dao = Room.databaseBuilder(this, AgendaDataBase.class, AgendaDataBase.NAME)
-                .allowMainThreadQueries()
-                .build()
-                .getRoomStudentDao();
-
+        dao = AgendaDataBase.getInstance(this).getRoomStudentDao();
         initData();
         loadStudent();
     }
