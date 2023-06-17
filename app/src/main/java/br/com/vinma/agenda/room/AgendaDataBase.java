@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.dao.StudentDAO;
 
-@Database(entities={Student.class}, version=2, exportSchema=false)
+@Database(entities={Student.class}, version=3, exportSchema=false)
 public abstract class AgendaDataBase extends RoomDatabase {
 
     private static final String NAME = "agenda.db";
