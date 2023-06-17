@@ -10,7 +10,7 @@ android {
         applicationId "br.com.vinma.agenda"
         minSdk 23
         targetSdk 33
-        versionCode 2
+        versionCode 3
         versionName "2.0.0-beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
