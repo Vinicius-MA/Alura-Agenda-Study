@@ -20,7 +20,6 @@ import br.com.vinma.agenda.room.dao.StudentDAO;
 public class StudentsFormActivity extends AppCompatActivity {
 
     private EditText etName;
-    private EditText etSurname;
     private EditText etPhone;
     private EditText etEmail;
     private StudentDAO dao;
@@ -71,21 +70,19 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void fulfillFields() {
         etName.setText(selectedStudent.getName());
-        etSurname.setText(selectedStudent.getSurname());
         etEmail.setText(selectedStudent.getEmail());
         etPhone.setText(selectedStudent.getPhone());
     }
 
     private void initData() {
         etName = findViewById(R.id.activity_students_form_name);
-        etSurname = findViewById(R.id.activity_students_form_surname);
         etPhone = findViewById(R.id.activity_students_form_phone);
         etEmail = findViewById(R.id.activity_students_form_email);
     }
 
     private void finishForm() {
         fulfillStudent();
-        String toToast = "";
+        String toToast;
         if(selectedStudent.hasValidId()) {
             dao.edit(selectedStudent);
             toToast = getString(R.string.act_std_form_edit_toast, selectedStudent.getFullName(this));
@@ -99,10 +96,9 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void fulfillStudent() {
         String name = etName.getText().toString();
-        String surname = etSurname.getText().toString();
         String phone = etPhone.getText().toString();
         String email = etEmail.getText().toString();
 
-        selectedStudent.edit(name, surname, phone, email);
+        selectedStudent.edit(name, phone, email);
     }
 }

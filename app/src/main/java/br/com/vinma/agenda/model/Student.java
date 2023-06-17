@@ -2,14 +2,11 @@ package br.com.vinma.agenda.model;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-
-import br.com.vinma.agenda.R;
 
 @Entity
 public class Student implements Serializable {
@@ -17,14 +14,12 @@ public class Student implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
-    private String surname;
     private String phone;
     private String email;
 
     @Ignore
-    public Student(String name, String surname, String phone, String email) {
+    public Student(String name, String phone, String email) {
         setName(name);
-        setSurname(surname);
         setPhone(phone);
         setEmail(email);
     }
@@ -41,12 +36,6 @@ public class Student implements Serializable {
         }
     }
 
-    public void setSurname(String surname) {
-        if( surname != null) {
-            this.surname = surname;
-        }
-    }
-
     public void setPhone(String phone) {
         if( phone != null) {
             this.phone = phone;
@@ -59,9 +48,8 @@ public class Student implements Serializable {
         }
     }
 
-    public void edit(String name, String surname, String phone, String email) {
+    public void edit(String name, String phone, String email) {
         this.setName(name);
-        this.setSurname(surname);
         this.setPhone(phone);
         this.setEmail(email);
     }
@@ -75,14 +63,8 @@ public class Student implements Serializable {
         return name;
     }
 
-    public String getSurname() {
-        if(surname == null){return "";}
-        return surname;
-    }
-
     public String getFullName(Context context){
-        return context.getString(R.string.model_student_fullname,
-                getName(), getSurname());
+        return getName();
     }
 
     public String getPhone() {
