@@ -17,14 +17,16 @@ public class Student implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
+    private String surname;
     private String phone;
     private String email;
 
     @Ignore
-    public Student(String name, String phone, String email) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
+    public Student(String name, String surname, String phone, String email) {
+        setName(name);
+        setSurname(surname);
+        setPhone(phone);
+        setEmail(email);
     }
 
     public Student() {}
@@ -34,19 +36,32 @@ public class Student implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if( name != null) {
+            this.name = name;
+        }
+    }
+
+    public void setSurname(String surname) {
+        if( surname != null) {
+            this.surname = surname;
+        }
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        if( phone != null) {
+            this.phone = phone;
+        }
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if( email != null) {
+            this.email = email;
+        }
     }
 
-    public void edit(String name, String phone, String email) {
+    public void edit(String name, String surname, String phone, String email) {
         this.setName(name);
+        this.setSurname(surname);
         this.setPhone(phone);
         this.setEmail(email);
     }
@@ -56,14 +71,27 @@ public class Student implements Serializable {
     }
 
     public String getName() {
+        if(name == null){return "";}
         return name;
     }
 
+    public String getSurname() {
+        if(surname == null){return "";}
+        return surname;
+    }
+
+    public String getFullName(Context context){
+        return context.getString(R.string.model_student_fullname,
+                getName(), getSurname());
+    }
+
     public String getPhone() {
+        if(phone == null){return "";}
         return phone;
     }
 
     public String getEmail() {
+        if(email == null){return "";}
         return email;
     }
 
@@ -71,11 +99,4 @@ public class Student implements Serializable {
         return this.getId() > 0;
     }
 
-    @NonNull
-    public String toString(Context mContext) {
-
-        return mContext.getString(R.string.model_student_to_string,
-            this.getName(), this.getPhone(), this.getEmail());
-
-    }
 }

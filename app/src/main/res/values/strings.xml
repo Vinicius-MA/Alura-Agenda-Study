@@ -20,4 +20,5 @@
     <!-- MODELS -->
         <!-- Student-->
             <string name="model_student_to_string">Name: %s\nPhone: %s;Email: %s</string>
+            <string name="model_student_fullname">%2$S, %1$s</string>
 </resources>
