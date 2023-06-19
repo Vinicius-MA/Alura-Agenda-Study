@@ -7,7 +7,10 @@ import java.util.Calendar;
 public class ConverterCalendar {
 
     @TypeConverter
-    public Long toLong(Calendar calendar){return calendar.getTimeInMillis();}
+    public Long toLong(Calendar calendar){
+        if(calendar == null){return null;}
+        return calendar.getTimeInMillis();
+    }
 
     @TypeConverter
     public Calendar toCalendar(Long value){

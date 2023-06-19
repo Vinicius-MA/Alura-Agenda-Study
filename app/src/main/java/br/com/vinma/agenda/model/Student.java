@@ -3,7 +3,6 @@ package br.com.vinma.agenda.model;
 import android.content.Context;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -23,18 +22,7 @@ public class Student implements Serializable {
     private String email;
     private Calendar dateCreated = Calendar.getInstance();
 
-    @Ignore
-    public Student(String name, String phone, String email) {
-        setName(name);
-        setPhone(phone);
-        setEmail(email);
-    }
-
-    public Student() {}
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id){this.id = id;}
 
     public void setName(String name) {
         if( name != null) {
@@ -55,7 +43,9 @@ public class Student implements Serializable {
     }
 
     public void setDateCreated(Calendar dateCreated) {
-        this.dateCreated = dateCreated;
+        if(dateCreated != null){
+            this.dateCreated = dateCreated;
+        }
     }
 
     public void edit(String name, String phone, String email) {

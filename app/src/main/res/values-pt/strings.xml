@@ -25,7 +25,5 @@
                 <string name="adap_std_list_created_on">"Criado em:\n%s"</string>
     <!-- MODELS -->
         <!-- Student-->
-                <string name="model_student_to_string">Nome: %s\nTelefone: %s; E-mail: %s</string>
-                <string name="model_student_fullname">%1$s %2$s</string>
-                <string name="student_date_format">dd/MMM/yyyy</string>
+    <string name="student_date_format">dd/MMM/yyyy</string>
 </resources>
