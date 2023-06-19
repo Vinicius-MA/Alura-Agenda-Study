@@ -1,5 +1,7 @@
 package br.com.vinma.agenda.ui.activity;
 
+import static br.com.vinma.agenda.model.TelephoneType.LANDLINE;
+import static br.com.vinma.agenda.model.TelephoneType.MOBILE;
 import static br.com.vinma.agenda.ui.activity.Constants.INTENT_KEY_STUDENT;
 
 import android.content.Intent;
@@ -12,10 +14,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
+import br.com.vinma.agenda.model.Telephone;
+import br.com.vinma.agenda.model.TelephoneType;
 import br.com.vinma.agenda.room.AgendaDataBase;
 import br.com.vinma.agenda.room.dao.StudentDAO;
+import br.com.vinma.agenda.room.dao.TelephoneDAO;
 
 public class StudentsFormActivity extends AppCompatActivity {
 
@@ -23,8 +30,12 @@ public class StudentsFormActivity extends AppCompatActivity {
     private EditText etPhoneLandline;
     private EditText etPhoneMobile;
     private EditText etEmail;
-    private StudentDAO dao;
+
     private Student selectedStudent;
+
+    private StudentDAO studentDAO;
+    private TelephoneDAO telephoneDAO;
+    private List<Telephone> telephonesFromStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +43,10 @@ public class StudentsFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_form);
 
-        dao = AgendaDataBase.getInstance(this).getRoomStudentDao();
+        AgendaDataBase database = AgendaDataBase.getInstance(this);
+        studentDAO = database.getStudentDao();
+        telephoneDAO = database.getTelephoneDao();
+
         initData();
         loadStudent();
     }
@@ -72,8 +86,18 @@ public class StudentsFormActivity extends AppCompatActivity {
     private void fulfillFields() {
         etName.setText(selectedStudent.getName());
         etEmail.setText(selectedStudent.getEmail());
-        etPhoneLandline.setText(selectedStudent.getLandlinePhone());
-        etPhoneMobile.setText(selectedStudent.getMobilePhone());
+        fulfillTelephoneFields();
+    }
+
+    private void fulfillTelephoneFields() {
+        telephonesFromStudent = telephoneDAO.getTelephonesFromStudent(selectedStudent.getId());
+        for(Telephone telephone: telephonesFromStudent){
+            if(telephone.getType().equals(LANDLINE)){
+                etPhoneLandline.setText(telephone.getNumber());
+            } else if(telephone.getType().equals(TelephoneType.MOBILE)){
+                etPhoneMobile.setText(telephone.getNumber());
+            }
+        }
     }
 
     private void initData() {
@@ -85,24 +109,64 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void finishForm() {
         fulfillStudent();
-        String toToast;
+
+        Telephone landline = createTelephone(etPhoneLandline, LANDLINE);
+        Telephone mobile = createTelephone(etPhoneMobile, MOBILE);
+
+        boolean isEdit;
         if(selectedStudent.hasValidId()) {
-            dao.edit(selectedStudent);
-            toToast = getString(R.string.act_std_form_edit_toast, selectedStudent.getName());
+            isEdit = editStudent(landline, mobile);
         }else{
-            dao.save(selectedStudent);
-            toToast = getString(R.string.act_std_form_save_toast, selectedStudent.getName());
+            isEdit = saveStudent(landline, mobile);
         }
-        Toast.makeText(this, toToast, Toast.LENGTH_LONG).show();
+        makeStudentToast(isEdit);
         finish();
+    }
+
+    private void makeStudentToast(boolean isEdit) {
+        String string = getString(isEdit ? R.string.act_std_form_edit_toast : R.string.act_std_form_save_toast, selectedStudent.getName());
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+    }
+
+    private boolean saveStudent(Telephone landline, Telephone mobile) {
+        int studentId = studentDAO.save(selectedStudent).intValue();
+        bindStudentToTelephones(studentId, landline, mobile);
+        telephoneDAO.save(landline, mobile);
+        return false;
+    }
+
+    private boolean editStudent(Telephone landline, Telephone mobile) {
+        studentDAO.edit(selectedStudent);
+        bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
+        updateTelephoneIds(landline, mobile);
+        telephoneDAO.update(landline, mobile);
+        return true;
+    }
+
+    private void updateTelephoneIds(Telephone landline, Telephone mobile){
+        for(Telephone telephone: telephonesFromStudent){
+            if(telephone.getType().equals(LANDLINE)){
+                landline.setId(telephone.getId());
+            } else if(telephone.getType().equals(MOBILE)){
+                mobile.setId(telephone.getId());
+            }
+        }
+    }
+
+    private void bindStudentToTelephones(int studentId, Telephone... telephones){
+        for(Telephone telephone: telephones){
+            telephone.setStudentId(studentId);
+        }
+    }
+
+    @NonNull
+    private Telephone createTelephone(EditText editText, TelephoneType type){
+        return new Telephone(editText.getText().toString(), type);
     }
 
     private void fulfillStudent() {
         String name = etName.getText().toString();
-        String landlinePhone = etPhoneLandline.getText().toString();
-        String mobilePhone = etPhoneMobile.getText().toString();
         String email = etEmail.getText().toString();
-
-        selectedStudent.edit(name, landlinePhone, mobilePhone, email);
+        selectedStudent.edit(name, email);
     }
 }

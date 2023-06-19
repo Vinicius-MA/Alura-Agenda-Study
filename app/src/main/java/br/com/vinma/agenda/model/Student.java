@@ -18,7 +18,6 @@ public class Student implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
-    private String landlinePhone, mobilePhone;
     private String email;
     private Calendar dateCreated = Calendar.getInstance();
 
@@ -27,18 +26,6 @@ public class Student implements Serializable {
     public void setName(String name) {
         if( name != null) {
             this.name = name;
-        }
-    }
-
-    public void setLandlinePhone(String landlinePhone) {
-        if( landlinePhone != null) {
-            this.landlinePhone = landlinePhone;
-        }
-    }
-
-    public void setMobilePhone(String mobilePhone) {
-        if( mobilePhone != null) {
-            this.mobilePhone = mobilePhone;
         }
     }
 
@@ -54,10 +41,8 @@ public class Student implements Serializable {
         }
     }
 
-    public void edit(String name, String landlinePhone, String mobilePhone, String email) {
+    public void edit(String name, String email) {
         this.setName(name);
-        this.setLandlinePhone(landlinePhone);
-        this.setMobilePhone(mobilePhone);
         this.setEmail(email);
     }
 
@@ -68,16 +53,6 @@ public class Student implements Serializable {
     public String getName() {
         if(name == null){return "";}
         return name;
-    }
-
-    public String getLandlinePhone() {
-        if(landlinePhone == null){return "";}
-        return landlinePhone;
-    }
-
-    public String getMobilePhone() {
-        if(mobilePhone == null){return "";}
-        return mobilePhone;
     }
 
     public String getEmail() {

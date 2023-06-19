@@ -1,6 +1,7 @@
 package br.com.vinma.agenda.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,19 @@ import java.util.List;
 
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
+import br.com.vinma.agenda.model.Telephone;
+import br.com.vinma.agenda.room.AgendaDataBase;
+import br.com.vinma.agenda.room.dao.TelephoneDAO;
 
 public class StudentListAdapter extends BaseAdapter {
 
     private final ArrayList<Student> students = new ArrayList<>();
     private final Context context;
+    private final TelephoneDAO dao;
 
     public StudentListAdapter(Context context) {
         this.context = context;
+        dao = AgendaDataBase.getInstance(context).getTelephoneDao();
     }
 
     @Override
@@ -49,12 +55,15 @@ public class StudentListAdapter extends BaseAdapter {
     }
 
     private void linkStudentToView(Student student, View view) {
+
+        Telephone firstTelephone = dao.getFirstTelephone(student.getId());
+
         TextView studentNameEt = view.findViewById(R.id.item_student_name);
         TextView studentPhoneEt = view.findViewById(R.id.item_student_phone);
         TextView studentDateEt = view.findViewById(R.id.item_student_date);
 
         studentNameEt.setText(student.getName());
-        studentPhoneEt.setText(student.getLandlinePhone());
+        if(firstTelephone != null) {studentPhoneEt.setText(firstTelephone.getNumber());}
         studentDateEt.setText(context.getString(R.string.adap_std_list_created_on, student.getDateCreatedFormatted(context)));
     }
 

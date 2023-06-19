@@ -21,7 +21,7 @@ public class StudentsListView {
     public StudentsListView(Context mContext) {
         this.mContext = mContext;
         this.studentsListAdapter = new StudentListAdapter(this.mContext);
-        dao = AgendaDataBase.getInstance(this.mContext).getRoomStudentDao();
+        dao = AgendaDataBase.getInstance(this.mContext).getStudentDao();
     }
 
     public void confirmStudentRemoval(AdapterView.AdapterContextMenuInfo menuInfo) {

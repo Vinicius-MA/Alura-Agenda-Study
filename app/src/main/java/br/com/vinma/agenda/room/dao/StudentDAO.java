@@ -14,7 +14,7 @@ import br.com.vinma.agenda.model.Student;
 public interface StudentDAO {
 
     @Insert
-    void save(Student student);
+    Long save(Student student);
 
     @Query("SELECT * FROM student")
     List<Student> all();

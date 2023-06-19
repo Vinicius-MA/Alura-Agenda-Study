@@ -10,17 +10,21 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import br.com.vinma.agenda.model.Student;
+import br.com.vinma.agenda.model.Telephone;
 import br.com.vinma.agenda.room.converter.ConverterCalendar;
+import br.com.vinma.agenda.room.converter.ConverterTelephoneType;
 import br.com.vinma.agenda.room.dao.StudentDAO;
+import br.com.vinma.agenda.room.dao.TelephoneDAO;
 
-@Database(entities={Student.class}, version=5, exportSchema=false)
-@TypeConverters({ConverterCalendar.class})
+@Database(entities={Student.class, Telephone.class}, version=6, exportSchema=false)
+@TypeConverters({ConverterCalendar.class, ConverterTelephoneType.class})
 public abstract class AgendaDataBase extends RoomDatabase {
 
     private static final String NAME = "agenda.db";
     private static AgendaDataBase instance;
 
-    public abstract StudentDAO getRoomStudentDao();
+    public abstract StudentDAO getStudentDao();
+    public abstract TelephoneDAO getTelephoneDao();
 
     public synchronized static AgendaDataBase getInstance(Context context){
         if(instance == null){
