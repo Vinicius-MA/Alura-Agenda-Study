@@ -2,22 +2,27 @@
     <!-- UI -->
         <!--  APPLICATION  -->
             <string name="app_name">Contact Book</string>
-        <!--  StudentsListActivity  -->
+            <!--  StudentsListActivity  -->
                 <string name="act_std_list_stat_bar_title">Students List</string>
                 <string name="act_std_list_fab_add_std_desc">Add Student</string>
                 <string name="act_std_list_con_menu_opt_remove">Remove</string>
-                <string name="act_std_list_con_menu_opt_remove_dial_title">Removing Studente</string>
+                <string name="act_std_list_con_menu_opt_remove_dial_title">Removing Student</string>
                 <string name="act_std_list_con_menu_opt_remove_dial_pos">Yes</string>
                 <string name="act_std_list_con_menu_opt_remove_dial_neg">No</string>
                 <string name="act_std_list_con_menu_opt_remove_dial_msg">Are you sure you want to permanently remove this student?</string>
-        <!--  StudentsFormActivity  -->
+            <!--  StudentsFormActivity  -->
                 <string name="act_std_form_stat_bar_title_new">New Student</string>
                 <string name="act_std_form_stat_bar_title_edit">Edit Student</string>
                 <string name="act_std_form_hint_name">Name</string>
+                <string name="act_std_form_hint_surname">Surname</string>
                 <string name="act_std_form_hint_phone">Phone Number</string>
                 <string name="act_std_form_hint_email">E-mail address</string>
                 <string name="act_std_form_btn_save">Save</string>
-    <!-- MODELS -->
+                <string name="act_std_form_edit_toast">%s updated!</string>
+                <string name="act_std_form_save_toast">%s created!</string>
+            <!-- Students List Adapter -->
+                <string name="adap_std_list_created_on">"Created on:\n%s"</string>
+        <!-- MODELS -->
         <!-- Student-->
-            <string name="model_student_to_string">Name: %s\nPhone: %s;Email: %s</string>
+    <string name="student_date_format">MMM-dd-yy</string>
 </resources>

@@ -13,15 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import br.com.vinma.agenda.R;
-import br.com.vinma.agenda.dao.StudentDAO;
 import br.com.vinma.agenda.model.Student;
+import br.com.vinma.agenda.room.AgendaDataBase;
+import br.com.vinma.agenda.room.dao.StudentDAO;
 
 public class StudentsFormActivity extends AppCompatActivity {
 
     private EditText etName;
     private EditText etPhone;
     private EditText etEmail;
-    private final StudentDAO dao = new StudentDAO();
+    private StudentDAO dao;
     private Student selectedStudent;
 
     @Override
@@ -30,6 +31,7 @@ public class StudentsFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_form);
 
+        dao = AgendaDataBase.getInstance(this).getRoomStudentDao();
         initData();
         loadStudent();
     }
@@ -80,14 +82,15 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void finishForm() {
         fulfillStudent();
+        String toToast;
         if(selectedStudent.hasValidId()) {
             dao.edit(selectedStudent);
+            toToast = getString(R.string.act_std_form_edit_toast, selectedStudent.getName());
         }else{
             dao.save(selectedStudent);
+            toToast = getString(R.string.act_std_form_save_toast, selectedStudent.getName());
         }
-
-        Toast.makeText(this, selectedStudent.toString(this), Toast.LENGTH_LONG).show();
-
+        Toast.makeText(this, toToast, Toast.LENGTH_LONG).show();
         finish();
     }
 

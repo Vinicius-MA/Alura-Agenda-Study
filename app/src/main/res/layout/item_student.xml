@@ -17,7 +17,7 @@
         android:layout_marginHorizontal="20sp"
         android:textStyle="bold"
         android:textSize="20sp"
-        tools:text="Vinícius"
+        tools:text="Vinicius"
         />
     <TextView
         android:id="@+id/item_student_phone"
@@ -32,5 +32,17 @@
         android:textStyle="normal"
         android:textSize="14sp"
         tools:text="(16)99756-3126"
+        />
+    <TextView
+        android:id="@+id/item_student_date"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/item_student_name"
+        app:layout_constraintBottom_toBottomOf="@id/item_student_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:layout_marginEnd="8dp"
+        tools:text="Created on:\n16/04/2023"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

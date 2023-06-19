@@ -2,43 +2,50 @@ package br.com.vinma.agenda.model;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import br.com.vinma.agenda.R;
 
+@Entity
 public class Student implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
     private String phone;
     private String email;
+    private Calendar dateCreated = Calendar.getInstance();
 
-    public Student(String name, String phone, String email) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
+    public void setId(int id){this.id = id;}
+
+    public void setName(String name) {
+        if( name != null) {
+            this.name = name;
+        }
     }
 
-    public Student() {
-
+    public void setPhone(String phone) {
+        if( phone != null) {
+            this.phone = phone;
+        }
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEmail(String email) {
+        if( email != null) {
+            this.email = email;
+        }
     }
 
-    private void setName(String name) {
-        this.name = name;
-    }
-
-    private void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    private void setEmail(String email) {
-        this.email = email;
+    public void setDateCreated(Calendar dateCreated) {
+        if(dateCreated != null){
+            this.dateCreated = dateCreated;
+        }
     }
 
     public void edit(String name, String phone, String email) {
@@ -52,26 +59,31 @@ public class Student implements Serializable {
     }
 
     public String getName() {
+        if(name == null){return "";}
         return name;
     }
 
     public String getPhone() {
+        if(phone == null){return "";}
         return phone;
     }
 
     public String getEmail() {
+        if(email == null){return "";}
         return email;
+    }
+
+    public Calendar getDateCreated() {
+        return dateCreated;
+    }
+
+    public String getDateCreatedFormatted(Context context){
+        SimpleDateFormat format = new SimpleDateFormat(context.getString(R.string.student_date_format), Locale.getDefault());
+        return format.format(dateCreated.getTime());
     }
 
     public boolean hasValidId() {
         return this.getId() > 0;
     }
 
-    @NonNull
-    public String toString(Context mContext) {
-
-        return mContext.getString(R.string.model_student_to_string,
-            this.getName(), this.getPhone(), this.getEmail());
-
-    }
 }

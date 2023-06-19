@@ -7,8 +7,9 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 
 import br.com.vinma.agenda.R;
-import br.com.vinma.agenda.dao.StudentDAO;
 import br.com.vinma.agenda.model.Student;
+import br.com.vinma.agenda.room.AgendaDataBase;
+import br.com.vinma.agenda.room.dao.StudentDAO;
 import br.com.vinma.agenda.ui.adapter.StudentListAdapter;
 
 public class StudentsListView {
@@ -20,7 +21,7 @@ public class StudentsListView {
     public StudentsListView(Context mContext) {
         this.mContext = mContext;
         this.studentsListAdapter = new StudentListAdapter(this.mContext);
-        this.dao = new StudentDAO();
+        dao = AgendaDataBase.getInstance(this.mContext).getRoomStudentDao();
     }
 
     public void confirmStudentRemoval(AdapterView.AdapterContextMenuInfo menuInfo) {
