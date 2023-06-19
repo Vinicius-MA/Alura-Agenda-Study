@@ -51,9 +51,11 @@ public class StudentListAdapter extends BaseAdapter {
     private void linkStudentToView(Student student, View view) {
         TextView studentNameEt = view.findViewById(R.id.item_student_name);
         TextView studentPhoneEt = view.findViewById(R.id.item_student_phone);
+        TextView studentDateEt = view.findViewById(R.id.item_student_date);
 
-        studentNameEt.setText(student.getFullName(context));
+        studentNameEt.setText(student.getName());
         studentPhoneEt.setText(student.getPhone());
+        studentDateEt.setText(context.getString(R.string.adap_std_list_created_on, student.getDateCreatedFormatted(context)));
     }
 
     private View createInflatedView(ViewGroup viewGroup) {

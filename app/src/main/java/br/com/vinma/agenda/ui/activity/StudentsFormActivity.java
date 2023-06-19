@@ -85,10 +85,10 @@ public class StudentsFormActivity extends AppCompatActivity {
         String toToast;
         if(selectedStudent.hasValidId()) {
             dao.edit(selectedStudent);
-            toToast = getString(R.string.act_std_form_edit_toast, selectedStudent.getFullName(this));
+            toToast = getString(R.string.act_std_form_edit_toast, selectedStudent.getName());
         }else{
             dao.save(selectedStudent);
-            toToast = getString(R.string.act_std_form_save_toast, selectedStudent.getFullName(this));
+            toToast = getString(R.string.act_std_form_save_toast, selectedStudent.getName());
         }
         Toast.makeText(this, toToast, Toast.LENGTH_LONG).show();
         finish();
