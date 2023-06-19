@@ -54,7 +54,7 @@ public class StudentListAdapter extends BaseAdapter {
         TextView studentDateEt = view.findViewById(R.id.item_student_date);
 
         studentNameEt.setText(student.getName());
-        studentPhoneEt.setText(student.getPhone());
+        studentPhoneEt.setText(student.getLandlinePhone());
         studentDateEt.setText(context.getString(R.string.adap_std_list_created_on, student.getDateCreatedFormatted(context)));
     }
 

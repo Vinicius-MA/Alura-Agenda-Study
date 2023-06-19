@@ -13,7 +13,7 @@ import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.converter.ConverterCalendar;
 import br.com.vinma.agenda.room.dao.StudentDAO;
 
-@Database(entities={Student.class}, version=4, exportSchema=false)
+@Database(entities={Student.class}, version=5, exportSchema=false)
 @TypeConverters({ConverterCalendar.class})
 public abstract class AgendaDataBase extends RoomDatabase {
 
