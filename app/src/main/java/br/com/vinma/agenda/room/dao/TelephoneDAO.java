@@ -13,7 +13,7 @@ import br.com.vinma.agenda.model.Telephone;
 @Dao
 public interface TelephoneDAO {
     @Query("SELECT * FROM `Telephone` " +
-            "WHERE studentId = :studentId LIMIT 1")
+            "WHERE (studentId = :studentId AND LENGTH(number)>0)LIMIT 1")
     Telephone getFirstTelephone(int studentId);
 
     @Insert
