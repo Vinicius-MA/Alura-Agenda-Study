@@ -1,5 +1,7 @@
 package br.com.vinma.agenda.ui.adapter;
 
+import static br.com.vinma.agenda.ui.application.AgendaApplication.bgExecutor;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
@@ -56,11 +59,17 @@ public class StudentListAdapter extends BaseAdapter {
 
     private void linkStudentToView(Student student, View view) {
 
-        Telephone firstTelephone = dao.getFirstTelephone(student.getId());
+        Telephone firstTelephone;
 
         TextView studentNameEt = view.findViewById(R.id.item_student_name);
         TextView studentPhoneEt = view.findViewById(R.id.item_student_phone);
         TextView studentDateEt = view.findViewById(R.id.item_student_date);
+
+        try {
+            firstTelephone = bgExecutor.submit(() -> dao.getFirstTelephone(student.getId())).get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         studentNameEt.setText(student.getName());
         if(firstTelephone != null) {studentPhoneEt.setText(firstTelephone.getNumber());}

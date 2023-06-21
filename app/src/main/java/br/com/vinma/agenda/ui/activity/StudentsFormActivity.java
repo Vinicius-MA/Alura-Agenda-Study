@@ -3,6 +3,7 @@ package br.com.vinma.agenda.ui.activity;
 import static br.com.vinma.agenda.model.TelephoneType.LANDLINE;
 import static br.com.vinma.agenda.model.TelephoneType.MOBILE;
 import static br.com.vinma.agenda.ui.activity.Constants.INTENT_KEY_STUDENT;
+import static br.com.vinma.agenda.ui.application.AgendaApplication.bgExecutor;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
@@ -90,8 +92,13 @@ public class StudentsFormActivity extends AppCompatActivity {
     }
 
     private void fulfillTelephoneFields() {
-        telephonesFromStudent = telephoneDAO.getTelephonesFromStudent(selectedStudent.getId());
-        for(Telephone telephone: telephonesFromStudent){
+        try {
+            telephonesFromStudent = bgExecutor.submit(() -> telephoneDAO.getTelephonesFromStudent(selectedStudent.getId())).get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for(Telephone telephone: this.telephonesFromStudent){
             if(telephone.getType().equals(LANDLINE)){
                 etPhoneLandline.setText(telephone.getNumber());
             } else if(telephone.getType().equals(TelephoneType.MOBILE)){
@@ -129,17 +136,28 @@ public class StudentsFormActivity extends AppCompatActivity {
     }
 
     private boolean saveStudent(Telephone landline, Telephone mobile) {
-        int studentId = studentDAO.save(selectedStudent).intValue();
-        bindStudentToTelephones(studentId, landline, mobile);
-        telephoneDAO.save(landline, mobile);
+        int studentId;
+        try {
+            studentId = bgExecutor.submit(() ->
+                    studentDAO.save(selectedStudent).intValue()).get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        assert studentId >= 0;
+        bgExecutor.execute(() -> {
+            bindStudentToTelephones(studentId, landline, mobile);
+            telephoneDAO.save(landline, mobile);
+        });
         return false;
     }
 
     private boolean editStudent(Telephone landline, Telephone mobile) {
-        studentDAO.edit(selectedStudent);
-        bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
-        updateTelephoneIds(landline, mobile);
-        telephoneDAO.update(landline, mobile);
+        bgExecutor.execute(() -> {
+            studentDAO.edit(selectedStudent);
+            bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
+            updateTelephoneIds(landline, mobile);
+            telephoneDAO.update(landline, mobile);
+        });
         return true;
     }
 

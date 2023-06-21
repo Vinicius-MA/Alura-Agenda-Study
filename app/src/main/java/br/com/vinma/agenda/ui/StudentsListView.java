@@ -1,10 +1,15 @@
 package br.com.vinma.agenda.ui;
 
+import static br.com.vinma.agenda.ui.application.AgendaApplication.bgExecutor;
+
 import android.content.Context;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
@@ -42,11 +47,17 @@ public class StudentsListView {
     }
 
     public void update() {
-        studentsListAdapter.update(dao.all());
+        List<Student> students;
+        try {
+            students = bgExecutor.submit(dao::all).get();
+            studentsListAdapter.update(students);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void remove(Student student) {
-        dao.remove(student);
+        bgExecutor.execute(() -> dao.remove(student));
         studentsListAdapter.remove(student);
     }
 }
