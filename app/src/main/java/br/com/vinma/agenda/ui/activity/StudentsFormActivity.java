@@ -124,22 +124,19 @@ public class StudentsFormActivity extends AppCompatActivity {
         Telephone landline = createTelephone(etPhoneLandline, LANDLINE);
         Telephone mobile = createTelephone(etPhoneMobile, MOBILE);
 
-        boolean isEdit;
         if(selectedStudent.hasValidId()) {
-            isEdit = editStudent(landline, mobile);
-        }else{
-            isEdit = saveStudent(landline, mobile);
+            editStudent(landline, mobile);
+        }else {
+            saveStudent(landline, mobile);
         }
-        makeStudentToast(isEdit);
-        finish();
     }
 
     private void makeStudentToast(boolean isEdit) {
         String string = getString(isEdit ? R.string.act_std_form_edit_toast : R.string.act_std_form_save_toast, selectedStudent.getName());
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG).show();
     }
 
-    private boolean saveStudent(Telephone landline, Telephone mobile) {
+    private void saveStudent(Telephone landline, Telephone mobile) {
         int studentId;
         try {
             studentId = bgExecutor.submit(() -> {
@@ -154,11 +151,12 @@ public class StudentsFormActivity extends AppCompatActivity {
             bindStudentToTelephones(studentId, landline, mobile);
             telephoneDAO.save(landline, mobile);
             dummySleep();
+            finish();
+            runOnUiThread(()-> makeStudentToast(false));
         });
-        return false;
     }
 
-    private boolean editStudent(Telephone landline, Telephone mobile) {
+    private void editStudent(Telephone landline, Telephone mobile) {
         bgExecutor.execute(() -> {
             runOnUiThread(()-> progressView.setVisibility(View.VISIBLE));
             studentDAO.edit(selectedStudent);
@@ -166,8 +164,9 @@ public class StudentsFormActivity extends AppCompatActivity {
             updateTelephoneIds(landline, mobile);
             dummySleep();
             telephoneDAO.update(landline, mobile);
+            finish();
+            runOnUiThread(()-> makeStudentToast(true));
         });
-        return true;
     }
 
     private void updateTelephoneIds(Telephone landline, Telephone mobile){
