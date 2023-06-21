@@ -19,17 +19,24 @@ import br.com.vinma.agenda.R;
 import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.AgendaDataBase;
 import br.com.vinma.agenda.room.dao.StudentDAO;
+import br.com.vinma.agenda.ui.activity.StudentsListActivity;
 import br.com.vinma.agenda.ui.adapter.StudentListAdapter;
-import br.com.vinma.agenda.ui.application.AgendaApplication;
 
-public class StudentsListView {
+public class StudentsListView extends ListView{
 
     private final Context mContext;
     private final StudentListAdapter studentsListAdapter;
     private final StudentDAO dao;
+    private final Activity activity;
+    private View itemProgressLayout;
+    private View itemMainLayout;
+    private View targetView;
 
-    public StudentsListView(Context mContext) {
-        this.mContext = mContext;
+    public StudentsListView(Context context) {
+        super(context);
+        this.mContext = context;
+        this.activity = (Activity)context;
+
         this.studentsListAdapter = new StudentListAdapter(this.mContext);
         dao = AgendaDataBase.getInstance(this.mContext).getStudentDao();
     }
@@ -38,11 +45,7 @@ public class StudentsListView {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(R.string.act_std_list_con_menu_opt_remove_dial_title)
                 .setMessage(R.string.act_std_list_con_menu_opt_remove_dial_msg)
-                .setPositiveButton(R.string.act_std_list_con_menu_opt_remove_dial_pos,
-                        (dialogInterface, i) -> {
-                            Student studentChosen = studentsListAdapter.getItem(menuInfo.position);
-                            remove(studentChosen);
-                        })
+                .setPositiveButton(R.string.act_std_list_con_menu_opt_remove_dial_pos, (dialogInterface, i) -> remove(menuInfo))
                 .setNegativeButton(R.string.act_std_list_con_menu_opt_remove_dial_neg, null)
                 .show();
     }
@@ -61,14 +64,39 @@ public class StudentsListView {
         }
     }
 
-    private void remove(Student student) {
-        Activity activity = (Activity)mContext;
-        bgExecutor.execute(() -> {
-            activity.runOnUiThread(()->studentsListAdapter.getProgressView().setVisibility(View.VISIBLE));
-            dao.remove(student);
-            dummySleep();
-            activity.runOnUiThread(()-> {
-                studentsListAdapter.remove(student);
+    private void remove(AdapterView.AdapterContextMenuInfo menuInfo) {
+        // passing a MenuInfo so the UI can be updated
+        Student student = studentsListAdapter.getItem(menuInfo.position);
+        bgExecutor.execute(() -> onRemoveBackground(menuInfo, student));
+    }
+
+    private void onRemoveBackground(AdapterView.AdapterContextMenuInfo menuInfo, Student student) {
+        activity.runOnUiThread(() -> updateUiOnBackgroundStart(menuInfo));
+        dao.remove(student);
+        dummySleep();
+        activity.runOnUiThread(()-> updateUiOnBackgroundEnd(menuInfo));
+    }
+
+    private void updateUiOnBackgroundStart(AdapterView.AdapterContextMenuInfo menuInfo) {
+        targetView = menuInfo.targetView;
+        findMenuInfoViewsByIds();
+        itemProgressLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void updateUiOnBackgroundEnd(AdapterView.AdapterContextMenuInfo menuInfo) {
+        itemProgressLayout.setVisibility(View.GONE);
+        itemMainLayout.setClickable(true);
+        removeStudentFromUi(menuInfo);
+    }
+
+    private void findMenuInfoViewsByIds() {
+        itemProgressLayout = targetView.findViewById(R.id.item_student_progress_layout);
+        itemMainLayout = targetView.findViewById(R.id.item_student_main);
+    }
+
+    private void removeStudentFromUi(AdapterView.AdapterContextMenuInfo menuInfo) {
+        Student student = studentsListAdapter.getItem(menuInfo.position);
+        studentsListAdapter.remove(student);
                 studentsListAdapter.getProgressView().setVisibility(View.GONE);
                 Toast.makeText(activity, student.getName() +  " removed!", Toast.LENGTH_LONG).show();
             });
