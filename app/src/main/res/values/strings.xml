@@ -23,7 +23,9 @@
                 <string name="act_std_form_save_toast">%s created!</string>
             <!-- Students List Adapter -->
                 <string name="adap_std_list_created_on">"Created on:\n%s"</string>
-        <!-- MODELS -->
-            <!-- Student-->
-                <string name="student_date_format">MMM-dd-yy</string>
+            <!-- Students List View -->
+                <string name="students_list_view_on_removed_toast">" %s removed!"</string>
+    <!-- MODELS -->
+    <!-- Student-->
+    <string name="student_date_format">MMM-dd-yy</string>
 </resources>

@@ -76,7 +76,8 @@ public class StudentsFormActivity extends AppCompatActivity {
         int titleId;
         Intent editStudentIntent = getIntent();
 
-        if (editStudentIntent.hasExtra(INTENT_KEY_STUDENT)) {
+        boolean isEdit = editStudentIntent.hasExtra(INTENT_KEY_STUDENT);
+        if (isEdit) {
             selectedStudent = (Student) editStudentIntent.getSerializableExtra(INTENT_KEY_STUDENT);
             fulfillFields();
             titleId = R.string.act_std_form_stat_bar_title_edit;
@@ -84,7 +85,6 @@ public class StudentsFormActivity extends AppCompatActivity {
             selectedStudent = new Student();
             titleId = R.string.act_std_form_stat_bar_title_new;
         }
-        // set status bar title accordingly to the calling mode (new/edit student)
         setTitle(titleId);
     }
 
@@ -96,11 +96,12 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void fulfillTelephoneFields() {
         try {
-            telephonesFromStudent = bgExecutor.submit(() -> telephoneDAO.getTelephonesFromStudent(selectedStudent.getId())).get();
+            int studentId = selectedStudent.getId();
+            telephonesFromStudent = bgExecutor.submit(() ->
+                    telephoneDAO.getTelephonesFromStudent(studentId)).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
         for(Telephone telephone: this.telephonesFromStudent){
             if(telephone.getType().equals(LANDLINE)){
                 etPhoneLandline.setText(telephone.getNumber());
@@ -120,15 +121,14 @@ public class StudentsFormActivity extends AppCompatActivity {
 
     private void finishForm() {
         fulfillStudent();
-
+        progressView.setVisibility(View.VISIBLE);
         Telephone landline = createTelephone(etPhoneLandline, LANDLINE);
         Telephone mobile = createTelephone(etPhoneMobile, MOBILE);
 
-        if(selectedStudent.hasValidId()) {
-            editStudent(landline, mobile);
-        }else {
-            saveStudent(landline, mobile);
-        }
+        boolean isEdit = selectedStudent.hasValidId();
+        if(isEdit) {editStudent(landline, mobile);}
+        else {saveStudent(landline, mobile);}
+        makeStudentToast(isEdit);
     }
 
     private void makeStudentToast(boolean isEdit) {
@@ -139,34 +139,32 @@ public class StudentsFormActivity extends AppCompatActivity {
     private void saveStudent(Telephone landline, Telephone mobile) {
         int studentId;
         try {
-            studentId = bgExecutor.submit(() -> {
-                runOnUiThread(()-> progressView.setVisibility(View.VISIBLE));
-                return studentDAO.save(selectedStudent).intValue();
-            }).get();
+            studentId = bgExecutor.submit(() -> studentDAO.save(selectedStudent).intValue()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         assert studentId >= 0;
-        bgExecutor.execute(() -> {
-            bindStudentToTelephones(studentId, landline, mobile);
-            telephoneDAO.save(landline, mobile);
-            dummySleep();
-            finish();
-            runOnUiThread(()-> makeStudentToast(false));
-        });
+        bgExecutor.execute(() -> doOnBackgroundSaveStudentEnd(landline, mobile, studentId));
+    }
+
+    private void doOnBackgroundSaveStudentEnd(Telephone landline, Telephone mobile, int studentId) {
+        bindStudentToTelephones(studentId, landline, mobile);
+        telephoneDAO.save(landline, mobile);
+        dummySleep();
+        finish();
     }
 
     private void editStudent(Telephone landline, Telephone mobile) {
-        bgExecutor.execute(() -> {
-            runOnUiThread(()-> progressView.setVisibility(View.VISIBLE));
-            studentDAO.edit(selectedStudent);
-            bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
-            updateTelephoneIds(landline, mobile);
-            dummySleep();
-            telephoneDAO.update(landline, mobile);
-            finish();
-            runOnUiThread(()-> makeStudentToast(true));
-        });
+        bgExecutor.execute(() -> doOnBackgroundEditStudent(landline, mobile));
+    }
+
+    private void doOnBackgroundEditStudent(Telephone landline, Telephone mobile) {
+        studentDAO.edit(selectedStudent);
+        bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
+        updateTelephoneIds(landline, mobile);
+        dummySleep();
+        telephoneDAO.update(landline, mobile);
+        finish();
     }
 
     private void updateTelephoneIds(Telephone landline, Telephone mobile){

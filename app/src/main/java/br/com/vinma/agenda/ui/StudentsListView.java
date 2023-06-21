@@ -97,9 +97,6 @@ public class StudentsListView extends ListView{
     private void removeStudentFromUi(AdapterView.AdapterContextMenuInfo menuInfo) {
         Student student = studentsListAdapter.getItem(menuInfo.position);
         studentsListAdapter.remove(student);
-                studentsListAdapter.getProgressView().setVisibility(View.GONE);
-                Toast.makeText(activity, student.getName() +  " removed!", Toast.LENGTH_LONG).show();
-            });
-        });
+        Toast.makeText(activity, activity.getString(R.string.students_list_view_on_removed_toast, student.getName()), Toast.LENGTH_LONG).show();
     }
 }
