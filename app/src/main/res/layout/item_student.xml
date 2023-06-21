@@ -4,8 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/item_student_main"
     >
+    <!-- Name -->
     <TextView
         android:id="@+id/item_student_name"
         android:layout_width="match_parent"
@@ -14,18 +16,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         android:layout_marginHorizontal="20sp"
+        android:layout_marginVertical="3sp"
         android:textStyle="bold"
         android:textSize="20sp"
         tools:text="Vinicius"
         />
+    <!-- First Telephone-->
     <TextView
         android:id="@+id/item_student_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/item_student_name"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         android:layout_marginTop="3sp"
         android:paddingBottom="6sp"
         android:layout_marginStart="30sp"
@@ -33,6 +40,7 @@
         android:textSize="14sp"
         tools:text="(16)99756-3126"
         />
+    <!-- Date Created -->
     <TextView
         android:id="@+id/item_student_date"
         android:layout_width="wrap_content"
@@ -45,25 +53,25 @@
         android:layout_marginEnd="8dp"
         tools:text="Created on:\n16/04/2023"
         />
+    <!-- ProgressBar Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_student_progress_layout"
-        style="@style/Theme.Agenda.AdapterProgressBar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        style="@style/Theme.Agenda.Layout.ProgressBar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/item_student_date"
-        app:layout_constraintEnd_toEndOf="@id/item_student_date"
-        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
+        <!-- ProgressBar -->
         <ProgressBar
             android:id="@+id/item_student_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Theme.Agenda.ProgressBar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginHorizontal="20dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
