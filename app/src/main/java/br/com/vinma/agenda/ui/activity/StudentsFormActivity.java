@@ -4,11 +4,13 @@ import static br.com.vinma.agenda.model.TelephoneType.LANDLINE;
 import static br.com.vinma.agenda.model.TelephoneType.MOBILE;
 import static br.com.vinma.agenda.ui.activity.Constants.INTENT_KEY_STUDENT;
 import static br.com.vinma.agenda.ui.application.AgendaApplication.bgExecutor;
+import static br.com.vinma.agenda.ui.application.AgendaApplication.dummySleep;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class StudentsFormActivity extends AppCompatActivity {
     private EditText etPhoneLandline;
     private EditText etPhoneMobile;
     private EditText etEmail;
+    private View progressView;
 
     private Student selectedStudent;
 
@@ -108,6 +111,7 @@ public class StudentsFormActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        progressView = findViewById(R.id.activity_students_form_progress_layout);
         etName = findViewById(R.id.activity_students_form_name);
         etPhoneLandline = findViewById(R.id.activity_students_form_phone_landline);
         etPhoneMobile = findViewById(R.id.activity_students_form_phone_mobile);
@@ -138,8 +142,10 @@ public class StudentsFormActivity extends AppCompatActivity {
     private boolean saveStudent(Telephone landline, Telephone mobile) {
         int studentId;
         try {
-            studentId = bgExecutor.submit(() ->
-                    studentDAO.save(selectedStudent).intValue()).get();
+            studentId = bgExecutor.submit(() -> {
+                runOnUiThread(()-> progressView.setVisibility(View.VISIBLE));
+                return studentDAO.save(selectedStudent).intValue();
+            }).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -147,15 +153,18 @@ public class StudentsFormActivity extends AppCompatActivity {
         bgExecutor.execute(() -> {
             bindStudentToTelephones(studentId, landline, mobile);
             telephoneDAO.save(landline, mobile);
+            dummySleep();
         });
         return false;
     }
 
     private boolean editStudent(Telephone landline, Telephone mobile) {
         bgExecutor.execute(() -> {
+            runOnUiThread(()-> progressView.setVisibility(View.VISIBLE));
             studentDAO.edit(selectedStudent);
             bindStudentToTelephones(selectedStudent.getId(), landline, mobile);
             updateTelephoneIds(landline, mobile);
+            dummySleep();
             telephoneDAO.update(landline, mobile);
         });
         return true;

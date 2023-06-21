@@ -25,6 +25,7 @@ public class StudentListAdapter extends BaseAdapter {
     private final ArrayList<Student> students = new ArrayList<>();
     private final Context context;
     private final TelephoneDAO dao;
+    private View progressView;
 
     public StudentListAdapter(Context context) {
         this.context = context;
@@ -64,6 +65,7 @@ public class StudentListAdapter extends BaseAdapter {
         TextView studentNameEt = view.findViewById(R.id.item_student_name);
         TextView studentPhoneEt = view.findViewById(R.id.item_student_phone);
         TextView studentDateEt = view.findViewById(R.id.item_student_date);
+        progressView = view.findViewById(R.id.item_student_progress_layout);
 
         try {
             firstTelephone = bgExecutor.submit(() -> dao.getFirstTelephone(student.getId())).get();
@@ -91,5 +93,9 @@ public class StudentListAdapter extends BaseAdapter {
     public void remove(Student student) {
         this.students.remove(student);
         notifyDataSetChanged();
+    }
+
+    public View getProgressView() {
+        return progressView;
     }
 }

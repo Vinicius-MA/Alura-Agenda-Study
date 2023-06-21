@@ -1,10 +1,14 @@
 package br.com.vinma.agenda.ui;
 
 import static br.com.vinma.agenda.ui.application.AgendaApplication.bgExecutor;
+import static br.com.vinma.agenda.ui.application.AgendaApplication.dummySleep;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -16,6 +20,7 @@ import br.com.vinma.agenda.model.Student;
 import br.com.vinma.agenda.room.AgendaDataBase;
 import br.com.vinma.agenda.room.dao.StudentDAO;
 import br.com.vinma.agenda.ui.adapter.StudentListAdapter;
+import br.com.vinma.agenda.ui.application.AgendaApplication;
 
 public class StudentsListView {
 
@@ -57,7 +62,16 @@ public class StudentsListView {
     }
 
     private void remove(Student student) {
-        bgExecutor.execute(() -> dao.remove(student));
-        studentsListAdapter.remove(student);
+        Activity activity = (Activity)mContext;
+        bgExecutor.execute(() -> {
+            activity.runOnUiThread(()->studentsListAdapter.getProgressView().setVisibility(View.VISIBLE));
+            dao.remove(student);
+            dummySleep();
+            activity.runOnUiThread(()-> {
+                studentsListAdapter.remove(student);
+                studentsListAdapter.getProgressView().setVisibility(View.GONE);
+                Toast.makeText(activity, student.getName() +  " removed!", Toast.LENGTH_LONG).show();
+            });
+        });
     }
 }
