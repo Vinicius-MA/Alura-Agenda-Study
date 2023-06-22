@@ -15,14 +15,17 @@
                 <string name="act_std_form_stat_bar_title_edit">Edit Student</string>
                 <string name="act_std_form_hint_name">Name</string>
                 <string name="act_std_form_hint_surname">Surname</string>
-                <string name="act_std_form_hint_phone">Phone Number</string>
+                <string name="act_std_form_hint_phone_landline">Landline phone number</string>
+                <string name="act_std_form_hint_phone_mobile">Mobile phone number</string>
                 <string name="act_std_form_hint_email">E-mail address</string>
                 <string name="act_std_form_btn_save">Save</string>
                 <string name="act_std_form_edit_toast">%s updated!</string>
                 <string name="act_std_form_save_toast">%s created!</string>
             <!-- Students List Adapter -->
                 <string name="adap_std_list_created_on">"Created on:\n%s"</string>
-        <!-- MODELS -->
-        <!-- Student-->
+            <!-- Students List View -->
+                <string name="students_list_view_on_removed_toast">" %s removed!"</string>
+    <!-- MODELS -->
+    <!-- Student-->
     <string name="student_date_format">MMM-dd-yy</string>
 </resources>

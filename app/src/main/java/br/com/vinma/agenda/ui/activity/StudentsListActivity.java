@@ -25,6 +25,7 @@ import br.com.vinma.agenda.ui.StudentsListView;
 public class StudentsListActivity extends AppCompatActivity {
 
     private StudentsListView studentsListView;
+    private ListView listViewStudents;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +37,6 @@ public class StudentsListActivity extends AppCompatActivity {
         configAddStudentButton();
         configActionBar();
         configListViewStudents();
-
     }
 
     @Override
@@ -78,13 +78,13 @@ public class StudentsListActivity extends AppCompatActivity {
     }
 
     private void configListViewStudents() {
-        ListView listViewStudents = findViewById(R.id.activity_students_list_listView_students);
+        listViewStudents = findViewById(R.id.activity_students_list_listView_students);
         studentsListView.configAdapter(listViewStudents);
-        configItemListener(listViewStudents);
+        configItemListener();
         registerForContextMenu(listViewStudents);
     }
 
-    private void configItemListener(ListView listViewStudents) {
+    public void configItemListener() {
         listViewStudents.setOnItemClickListener((adapterView, view, pos, id) -> {
             Student selectedStudent = (Student) adapterView.getItemAtPosition(pos);
             startStudentFormActivityInEditMode(selectedStudent);

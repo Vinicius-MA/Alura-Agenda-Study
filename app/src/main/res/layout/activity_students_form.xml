@@ -21,29 +21,28 @@
             app:layout_constraintTop_toTopOf="parent"
             android:importantForAutofill="no"
             />
-        <!-- Surname EditText -->
+        <!-- Landline Phone EditText -->
         <EditText
-            android:id="@+id/activity_students_form_surname"
-            android:visibility="gone"
+            android:id="@+id/activity_students_form_phone_landline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="@string/act_std_form_hint_surname"
-            android:inputType="textCapWords"
+            android:hint="@string/act_std_form_hint_phone_landline"
+            android:inputType="phone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/activity_students_form_name"
             android:importantForAutofill="no"
             />
-        <!-- Phone EditText -->
+        <!-- Mobile Phone EditText -->
         <EditText
-            android:id="@+id/activity_students_form_phone"
+            android:id="@+id/activity_students_form_phone_mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="@string/act_std_form_hint_phone"
+            android:hint="@string/act_std_form_hint_phone_mobile"
             android:inputType="phone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_students_form_surname"
+            app:layout_constraintTop_toBottomOf="@id/activity_students_form_phone_landline"
             android:importantForAutofill="no"
             />
         <!-- Email EditText -->
@@ -54,8 +53,26 @@
             android:layout_margin="8dp"
             android:hint="@string/act_std_form_hint_email"
             android:inputType="textEmailAddress"
-            app:layout_constraintTop_toBottomOf="@id/activity_students_form_phone"
+            app:layout_constraintTop_toBottomOf="@id/activity_students_form_phone_mobile"
             android:importantForAutofill="no"
             />
+        <!-- Progress Bar LAyout -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activity_students_form_progress_layout"
+            style="@style/Theme.Agenda.Layout.ProgressBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+            <ProgressBar
+                android:id="@+id/activity_students_form_progress"
+                style="@style/Theme.Agenda.ProgressBar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
