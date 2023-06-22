@@ -1,4 +1,4 @@
-# Alura Agenda Study
+# App Agenda (Study)
 App developed as a study of Android architecture. Based on Alura's Android courses (https://www.alura.com.br)
 
 ## Developed Concepts (Android Formation parts I to III)
